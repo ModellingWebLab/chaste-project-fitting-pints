@@ -1,0 +1,34 @@
+{
+    "optimisation_algorithm": "CMAES",
+    "optimisation_arguments": {
+        "repeats": 1
+    },
+
+    "sampling_algorithm": "AdaptiveCovarianceMCMC",
+    "sampling_arguments": {
+         "iterations": 10000,
+         "warm_up": 5000
+     },
+
+     "output": {
+         "IKr": "IKr"
+     },
+
+     "input": {
+         "exp_times":"t"
+     },
+
+     "prior": {
+        "herg:rapid_delayed_rectifier_potassium_channel_kO1": [1e-7, 0.5],
+        "herg:rapid_delayed_rectifier_potassium_channel_kO2": [1e-3, 0.1],
+        "herg:rapid_delayed_rectifier_potassium_channel_kC1": [1e-7, 0.5],
+        "herg:rapid_delayed_rectifier_potassium_channel_kC2": [1e-3, 0.1],
+        "herg:rapid_delayed_rectifier_potassium_channel_kI1": [1e-7, 0.5],
+        "herg:rapid_delayed_rectifier_potassium_channel_kI2": [1e-3, 0.1],
+        "herg:rapid_delayed_rectifier_potassium_channel_kA1": [1e-7, 0.5],
+        "herg:rapid_delayed_rectifier_potassium_channel_kA2": [1e-3, 0.1],
+        "oxmeta:membrane_rapid_delayed_rectifier_potassium_current_conductance": [0.05, 1.00]
+    },
+
+    "noise_std": 0.0046296814258860
+}

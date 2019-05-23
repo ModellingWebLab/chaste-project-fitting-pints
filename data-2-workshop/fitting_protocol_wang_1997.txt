@@ -1,0 +1,40 @@
+{
+    "optimisation_algorithm": "CMAES",
+    "optimisation_arguments": {
+        "repeats": 1
+    },
+
+    "sampling_algorithm": "AdaptiveCovarianceMCMC",
+    "sampling_arguments": {
+         "iterations": 0,
+         "warm_up": 5000
+     },
+
+     "output": {
+         "IKr": "IKr"
+     },
+
+     "input": {
+         "exp_times":"t"
+     },
+
+     "prior": {
+        "herg:p1": [1e-7, 0.5],
+        "herg:p2": [1e-3, 0.1],
+        "herg:p3": [1e-7, 0.5],
+        "herg:p4": [1e-3, 0.1],
+        "herg:p5": [1e-7, 0.5],
+        "herg:p6": [1e-7, 0.5],
+        "herg:p7": [1e-7, 0.5],
+        "herg:p8": [1e-3, 0.1],
+        "herg:p9": [1e-7, 0.5],
+        "herg:p10": [1e-3, 0.1],
+        "herg:p11": [1e-7, 0.5],
+        "herg:p12": [1e-3, 0.1],
+        "herg:p13": [1e-7, 0.5],
+        "herg:p14": [1e-3, 0.1],
+        "oxmeta:membrane_rapid_delayed_rectifier_potassium_current_conductance": [0.05, 1.00]
+    },
+
+    "noise_std": 0.0046296814258860
+}

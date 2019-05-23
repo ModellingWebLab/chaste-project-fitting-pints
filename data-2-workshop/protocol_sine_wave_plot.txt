@@ -1,0 +1,189 @@
+# 9-parameter mix of sine wave protocol based on one designed by Kylie Beattie for identification
+#  of hERG channel parameters.
+# This variant is used to match experimental recordings obtained from Kylie in order to re-create
+#  fittings of the hERG channel model formulations for the WebLab
+
+namespace oxmeta = "https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#"
+namespace herg = "herg:params#"
+namespace pinput = "dummy:name#"
+
+inputs {
+    # Inputs controlling mix of sine waves
+    amplitudes = [54, 26, 10]
+    periods = [0.007, 0.037, 0.19]
+    shifts = [2500, 2500, 2500]
+
+    # Inputs controlling when sine waves are active
+    tswitch = [250,300,500,1500,2000,3000,6500,7000,8000]
+    vswitch = [-80,-120,-80,40,-120,-80,-30,-120,-80]
+
+    duration = 8000
+    stepsize = 0.1
+    adjust_time = 5
+
+    # Min and Max voltage attained over protocol. Used in a separate simulation step
+    # to ensure physiologically realistic range for state transition rates.
+    # (Note: could be calculated from parameters above, but cheaper to input separately)
+    min_voltage = -120
+    max_voltage = 58.25
+    t_check = [-2,-1]
+
+    # Placeholder -- MUST BE SET FROM OUTSIDE TO MATCH EXPERIMENTAL TIMES!!
+    exp_times = [i/10 for i in 0:80000]
+}
+
+import std = "BasicLibrary.txt"
+
+units {
+    K = kelvin
+    mV = milli volt
+    ms = milli second
+    nA = nano ampere
+    micromolar = micro mole . litre^-1 "{/Symbol u}M"
+    per_ms = milli second^-1
+    A_per_F = ampere . farad^-1
+    A = ampere
+    F = farad
+    S = ampere . volt^-1
+    uS = nA . mV^-1
+    S_per_F = S . farad^-1
+}
+
+model interface {
+    # Current units conversion
+    var chaste_membrane_capacitance units F = 3e-10
+    convert A_per_F to A by lambda rhs: rhs * chaste_membrane_capacitance
+    convert A to A_per_F by lambda rhs: rhs / chaste_membrane_capacitance
+    convert S_per_F to S by lambda rhs: rhs * chaste_membrane_capacitance
+    convert S to S_per_F by lambda rhs: rhs / chaste_membrane_capacitance
+
+    # Set up initial conditions
+    input oxmeta:potassium_reversal_potential units mV
+    clamp oxmeta:potassium_reversal_potential to -88.35745988248085 :: mV
+
+    # Fix conductance for better comparison
+    input oxmeta:membrane_rapid_delayed_rectifier_potassium_current_conductance units uS
+    clamp oxmeta:membrane_rapid_delayed_rectifier_potassium_current_conductance to 0.5 :: uS
+
+    # Defined a dummy namespace for creating 'inputs' to the sin wave formulation of
+    #  membrane voltage. These will be set to the input 'C' values in the simulation
+    #  to allow external modification of protocol parameters.
+    input pinput:c0 units mV = 0
+    input pinput:c1 units mV = 0
+    input pinput:c2 units mV = 0
+    input pinput:c3 units dimensionless = 0
+    input pinput:c4 units dimensionless = 0
+    input pinput:c5 units dimensionless = 0
+    input pinput:c6 units dimensionless = 0
+    input pinput:c7 units dimensionless = 0
+    input pinput:c8 units dimensionless = 0
+
+    input pinput:t0 units ms = 0
+    input pinput:t1 units ms = 0
+    input pinput:t2 units ms = 0
+    input pinput:t3 units ms = 0
+    input pinput:t4 units ms = 0
+    input pinput:t5 units ms = 0
+    input pinput:t6 units ms = 0
+    input pinput:t7 units ms = 0
+    input pinput:t8 units ms = 0
+
+    # Special times at which the model will be evaluated at min_voltage and max_voltage
+    # to ensure that transition rates at physiological reasonable.
+    input pinput:tx1 units ms = -2
+    input pinput:tx2 units ms = -1
+
+    input pinput:v0 units mV = 0
+    input pinput:v1 units mV = 0
+    input pinput:v2 units mV = 0
+    input pinput:v3 units mV = 0
+    input pinput:v4 units mV = 0
+    input pinput:v5 units mV = 0
+    input pinput:v6 units mV = 0
+    input pinput:v7 units mV = 0
+    input pinput:v8 units mV = 0
+
+    input pinput:vmin units mV = 0
+    input pinput:vmax units mV = 0
+
+    # Redefine V to a sum of sine waves described by dummy input parameters pinput:c0-7
+    # These are set at the beginning of the simulation to values in protocol input 'C'
+    define oxmeta:membrane_voltage = \
+        if (oxmeta:time >= 0::ms && oxmeta:time < pinput:t0) then pinput:v0 \
+        else if (oxmeta:time >= pinput:t0 && oxmeta:time < pinput:t1) then pinput:v1 \
+        else if (oxmeta:time >= pinput:t1 && oxmeta:time < pinput:t2) then pinput:v2 \
+        else if (oxmeta:time >= pinput:t2 && oxmeta:time < pinput:t3) then pinput:v3 \
+        else if (oxmeta:time >= pinput:t3 && oxmeta:time < pinput:t4) then pinput:v4 \
+        else if (oxmeta:time >= pinput:t4 && oxmeta:time < pinput:t5) then pinput:v5 \
+        else if (oxmeta:time >= pinput:t5 && oxmeta:time < pinput:t6) then pinput:v6 + \
+        pinput:c0*MathML:sin(pinput:c3*((oxmeta:time/1::ms)-pinput:c6)) + \
+        pinput:c1*MathML:sin(pinput:c4*((oxmeta:time/1::ms)-pinput:c7)) + \
+        pinput:c2*MathML:sin(pinput:c5*((oxmeta:time/1::ms)-pinput:c8)) \
+        else if (oxmeta:time >= pinput:t6 && oxmeta:time < pinput:t7) then pinput:v7 \
+        else if (oxmeta:time >= pinput:t7 && oxmeta:time < pinput:t8) then pinput:v8 \
+        else if (oxmeta:time == pinput:tx1) then pinput:vmin \
+        else if (oxmeta:time == pinput:tx2) then pinput:vmax \
+        else pinput:v0
+
+    # Output current response to membrane potential protocol, as well as time
+    output oxmeta:time units ms
+    output oxmeta:membrane_voltage units mV
+    output oxmeta:membrane_rapid_delayed_rectifier_potassium_current units nA
+}
+
+tasks {
+   simulation sim = timecourse {
+        range time units ms vector exp_times
+        modifiers {
+            # Assign protocol inputs 'C' to dummy variables in membrane_voltage definition
+            at start set pinput:c0 = amplitudes[0]
+            at start set pinput:c1 = amplitudes[1]
+            at start set pinput:c2 = amplitudes[2]
+            at start set pinput:c3 = periods[0]
+            at start set pinput:c4 = periods[1]
+            at start set pinput:c5 = periods[2]
+
+            # Experimental protocol used by Kylie adopts a -0.1ms time shift from the original
+            at start set pinput:c6 = shifts[0]+stepsize
+            at start set pinput:c7 = shifts[1]+stepsize
+            at start set pinput:c8 = shifts[2]+stepsize
+
+            at start set pinput:t0 = tswitch[0]+stepsize
+            at start set pinput:t1 = tswitch[1]+stepsize
+            at start set pinput:t2 = tswitch[2]+stepsize
+            at start set pinput:t3 = tswitch[3]+stepsize
+            at start set pinput:t4 = tswitch[4]+stepsize
+            at start set pinput:t5 = tswitch[5]+stepsize
+            at start set pinput:t6 = tswitch[6]+stepsize
+            at start set pinput:t7 = tswitch[7]+stepsize
+            at start set pinput:t8 = tswitch[8]+stepsize
+
+            at start set pinput:v0 = vswitch[0]
+            at start set pinput:v1 = vswitch[1]
+            at start set pinput:v2 = vswitch[2]
+            at start set pinput:v3 = vswitch[3]
+            at start set pinput:v4 = vswitch[4]
+            at start set pinput:v5 = vswitch[5]
+            at start set pinput:v6 = vswitch[6]
+            at start set pinput:v7 = vswitch[7]
+            at start set pinput:v8 = vswitch[8]
+
+            at start set pinput:vmin = min_voltage
+            at start set pinput:vmax = max_voltage
+        }
+    }
+    simulation check = timecourse {
+        range time units ms vector t_check
+    }
+}
+
+outputs {
+    t = sim:time units ms "Time (ms)"
+    V = sim:membrane_voltage units mV "Membrane potential (mV)"
+    IKr = sim:membrane_rapid_delayed_rectifier_potassium_current "hERG Channel Current"
+}
+
+plots {
+    plot "Current" using lines { IKr against t }
+    plot "Membrane potential" using lines { V against t }
+}

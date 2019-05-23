@@ -1,0 +1,75 @@
+[[model]]
+name: model-10
+author: Sanmitra Ghosh
+desc: Check associated model definition document
+# Initial values
+ikr.C1 = 0
+ikr.Om = 0
+ikr.h = 0
+
+#
+# Simulation engine variables
+#
+[engine]
+time = 0 [ms] in [ms]
+    bind time
+
+#
+# Membrane potential
+#
+[membrane]
+V = -80 [mV]
+    in [mV]
+
+[nernst]
+EK = -85 [mV]
+    in [mV]
+
+#
+#
+[ikr]
+use membrane.V
+IKr = p13 * O * (V - nernst.EK)
+    in [nA]
+O = Om*h
+    in [1]
+dot(Om) = a2*C1 - b2*Om
+    in [1]
+dot(C1) = b2*Om + a1*C2 - C1*(a2 +b1)
+    in [1]
+C2 = 1 -(Om+C1)
+    in [1]
+dot(h) = (h_inf - h) / tauh
+    in [1]
+h_inf = ah/(ah + bh)
+    in [1]
+tauh = 1/(ah + bh)
+    in [ms]
+
+a1 = p1 * exp(p2*V)
+    in [1/ms]
+b1 = p3 * exp(-p4*V)
+    in [1/ms]
+bh = p5 * exp(p6*V)
+    in [1/ms]
+ah = p7 * exp(-p8*V)
+    in [1/ms]
+a2 = p9 * exp(p10*V)
+    in [1/ms]
+b2 = p11 * exp(-p12*V)
+    in [1/ms]
+    
+p1 = 2.26e-4 [1/ms] in [1/ms]
+p2 = 0.06990 [1/mV] in [1/mV]
+p3 = 3.45e-5 [1/ms] in [1/ms]
+p4 = 0.05462 [1/mV] in [1/mV]
+p5 = 0.08730 [1/ms] in [1/ms]
+p6 = 8.91e-3 [1/mV] in [1/mV]
+p7 = 5.15e-3 [1/ms] in [1/ms]
+p8 = 0.03158 [1/mV] in [1/mV]
+p9 = 0.08730 [1/ms] in [1/ms]
+p10 = 8.91e-3 [1/mV] in [1/mV]
+p11 = 5.15e-3 [1/ms] in [1/ms]
+p12 = 0.03158 [1/mV] in [1/mV]
+p13 = 0.15240 [uS] in [uS]
+

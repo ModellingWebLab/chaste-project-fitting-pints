@@ -1,0 +1,75 @@
+[[model]]
+name: Wang-1997-IKr
+author: Dominic Whittaker
+# Initial values
+ikr.c0 = 1
+ikr.c1 = 0
+ikr.c2 = 0
+ikr.o = 0
+ikr.i = 0
+
+#
+# Simulation engine variables
+#
+[engine]
+time = 0 [ms] in [ms]
+    bind time
+
+#
+# Membrane potential
+#
+[membrane]
+V = 0 [mV] in [mV]
+
+[nernst]
+EK = -85 [mV] in [mV]
+
+[ikr]
+use membrane.V
+IKr = p15 * o * (V - nernst.EK)
+    in [nA]
+
+k51 = p11 * exp(p12 * V)
+    in [1/ms]
+k15 = p13 * exp(-p14 * V)
+    in [1/ms]    
+k23 = p1 * exp(p2 * V)
+    in [1/ms]
+k32 = p3 * exp(-p4 * V)
+    in [1/ms]
+k12 = p5
+    in [1/ms]
+k21 = p6
+    in [1/ms]    
+k34 = p7 * exp(p8 * V)
+    in [1/ms]
+k43 = p9 * exp(-p10 * V)
+    in [1/ms]
+
+dot(c0) = k15 * c1 - k51 * c0
+    in [1]
+dot(c1) = k21 * c2 + k51 * c0 - (k12 + k15) * c1
+    in [1]
+dot(c2) = k32 * o + k12 * c1 - (k23 + k21) * c2
+    in [1]
+dot(o) = k43 * i + k23 * c2 - (k34 + k32) * o
+    in [1]
+dot(i) = k34 * o - k43 * i
+    in [1]
+
+p1 = 0.013733 [1/ms] in [1/ms]
+p2 = 0.038198 [1/mV] in [1/mV]
+p3 = 6.89e-5 [1/ms] in [1/ms]
+p4 = 0.04178 [1/mV] in [1/mV]
+p5 = 0.023761 [1/ms] in [1/ms]
+p6 = 0.036778 [1/ms] in [1/ms]
+p7 = 0.090821 [1/ms] in [1/ms]
+p8 = 0.023391 [1/mV] in [1/mV]
+p9 = 0.006497 [1/ms] in [1/ms]
+p10 = 0.03268 [1/mV] in [1/mV]
+p11 = 0.022348 [1/ms] in [1/ms]
+p12 = 0.01176 [1/mV] in [1/mV]
+p13 = 0.047002 [1/ms] in [1/ms]
+p14 = 0.0631 [1/mV]	 in [1/mV]
+p15 = 0.3 [uS] in [uS]
+

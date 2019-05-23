@@ -1,0 +1,26 @@
+{"algorithm":"AdaptiveMCMC",
+ 	"arguments":{
+ 		"cmaOpt":5,
+ 		"cmaMaxFevals":20000,
+ 		"burn":50000,
+ 		"numIters":100000
+ 	},
+ 	"output":{
+ 		"IKr":"IKr"
+ 	},
+ 	"input":{
+ 		"exp_times":"t"
+ 	},
+ 	"prior":{
+ 		"herg:rapid_delayed_rectifier_potassium_channel_kO1":[1e-7,0.1],
+		"herg:rapid_delayed_rectifier_potassium_channel_kC1":[1e-7,0.1],
+		"herg:rapid_delayed_rectifier_potassium_channel_kI1":[1e-7,0.1],
+		"herg:rapid_delayed_rectifier_potassium_channel_kA1":[1e-7,0.1],
+		"herg:rapid_delayed_rectifier_potassium_channel_kO2":[1e-7,0.1],
+		"herg:rapid_delayed_rectifier_potassium_channel_kC2":[1e-7,0.1],
+		"herg:rapid_delayed_rectifier_potassium_channel_kI2":[1e-7,0.1],
+		"herg:rapid_delayed_rectifier_potassium_channel_kA2":[1e-7,0.1],
+		"oxmeta:membrane_rapid_delayed_rectifier_potassium_current_conductance":[0.0612,0.612],
+ 		"obj:std":0.0046296814258860
+ 	}
+}

@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model name="Wang_1997_IKr"
+    xmlns="http://www.cellml.org/cellml/1.0#"
+    xmlns:cellml="http://www.cellml.org/cellml/1.0#"
+    xmlns:cmeta="http://www.cellml.org/metadata/1.0#"
+    >
+    <documentation xmlns="http://cellml.org/tmp-documentation">
+        <article>
+            <title>Wang-1997-IKr</title>
+        </article>
+    </documentation>
+    <units name="ms">
+        <unit exponent="1" multiplier="0.001" units="second"/>
+    </units>
+    <units name="nA">
+        <unit exponent="1" multiplier="1e-09" units="ampere"/>
+    </units>
+    <units name="mS_per_uF">
+        <unit exponent="-1" multiplier="1000.0" units="second"/>
+    </units>
+    <units name="per_mV">
+        <unit exponent="-1" units="gram"/>
+        <unit exponent="-2" units="metre"/>
+        <unit exponent="3" units="second"/>
+        <unit exponent="1" units="ampere"/>
+    </units>
+    <units name="uS">
+        <unit exponent="-1" multiplier="1e-09" units="gram"/>
+        <unit exponent="-2" units="metre"/>
+        <unit exponent="3" units="second"/>
+        <unit exponent="2" units="ampere"/>
+    </units>
+    <units name="mV">
+        <unit exponent="1" units="gram"/>
+        <unit exponent="2" units="metre"/>
+        <unit exponent="-3" units="second"/>
+        <unit exponent="-1" units="ampere"/>
+    </units>
+
+    <component name="environment">
+        <variable name="time" public_interface="out" units="ms" cmeta:id="time">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#time">
+                    <bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#time"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+    </component>
+
+    <component name="membrane">
+        <variable initial_value="-80.0" name="V" public_interface="out" units="mV" cmeta:id="membrane_voltage">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#membrane_voltage">
+                    <bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_voltage"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+    </component>
+
+    <component name="nernst">
+        <variable initial_value="-85.0" name="EK" public_interface="out" units="mV" cmeta:id="potassium_reversal_potential">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#potassium_reversal_potential">
+                    <bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#potassium_reversal_potential"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+    </component>
+
+    <component name="ikr">
+        <variable name="IKr" units="nA" cmeta:id="membrane_rapid_delayed_rectifier_potassium_current">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#membrane_rapid_delayed_rectifier_potassium_current">
+                   <bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_rapid_delayed_rectifier_potassium_current"/>
+                </rdf:Description>
+             </rdf:RDF>
+        </variable>
+
+        <variable initial_value="0.0" name="o" units="dimensionless"/>
+        <variable initial_value="1.0" name="c0" units="dimensionless"/>
+        <variable initial_value="0.0" name="c1" units="dimensionless"/>
+        <variable initial_value="0.0" name="c2" units="dimensionless"/>
+        <variable initial_value="0.0" name="i" units="dimensionless"/>
+
+        <variable name="k12" units="mS_per_uF"/>
+        <variable name="k15" units="mS_per_uF"/>
+        <variable name="k21" units="mS_per_uF"/>
+        <variable name="k23" units="mS_per_uF"/>
+        <variable name="k32" units="mS_per_uF"/>
+        <variable name="k34" units="mS_per_uF"/>
+        <variable name="k43" units="mS_per_uF"/>
+        <variable name="k51" units="mS_per_uF"/>
+
+        <variable initial_value="0.013733" name="p1" units="mS_per_uF" cmeta:id="fitting_p1">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#fitting_p1">
+                    <bqbiol:is rdf:resource="herg:params#p1"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+        <variable initial_value="0.038198" name="p2" units="per_mV" cmeta:id="fitting_p2">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#fitting_p2">
+                    <bqbiol:is rdf:resource="herg:params#p2"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+        <variable initial_value="6.89e-05" name="p3" units="mS_per_uF" cmeta:id="fitting_p3">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#fitting_p3">
+                    <bqbiol:is rdf:resource="herg:params#p3"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+        <variable initial_value="0.04178" name="p4" units="per_mV" cmeta:id="fitting_p4">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#fitting_p4">
+                    <bqbiol:is rdf:resource="herg:params#p4"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+        <variable initial_value="0.023761" name="p5" units="mS_per_uF" cmeta:id="fitting_p5">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#fitting_p5">
+                    <bqbiol:is rdf:resource="herg:params#p5"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+        <variable initial_value="0.036778" name="p6" units="mS_per_uF" cmeta:id="fitting_p6">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#fitting_p6">
+                    <bqbiol:is rdf:resource="herg:params#p6"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+        <variable initial_value="0.090821" name="p7" units="mS_per_uF" cmeta:id="fitting_p7">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#fitting_p7">
+                    <bqbiol:is rdf:resource="herg:params#p7"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+        <variable initial_value="0.023391" name="p8" units="per_mV" cmeta:id="fitting_p8">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#fitting_p8">
+                    <bqbiol:is rdf:resource="herg:params#p8"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+        <variable initial_value="0.006497" name="p9" units="mS_per_uF" cmeta:id="fitting_p9">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#fitting_p9">
+                    <bqbiol:is rdf:resource="herg:params#p9"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+        <variable initial_value="0.03268" name="p10" units="per_mV" cmeta:id="fitting_p10">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#fitting_p10">
+                    <bqbiol:is rdf:resource="herg:params#p10"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+        <variable initial_value="0.022348" name="p11" units="mS_per_uF" cmeta:id="fitting_p11">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#fitting_p11">
+                    <bqbiol:is rdf:resource="herg:params#p11"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+        <variable initial_value="0.01176" name="p12" units="per_mV" cmeta:id="fitting_p12">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#fitting_p12">
+                    <bqbiol:is rdf:resource="herg:params#p12"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+        <variable initial_value="0.047002" name="p13" units="mS_per_uF" cmeta:id="fitting_p13">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#fitting_p13">
+                    <bqbiol:is rdf:resource="herg:params#p13"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+        <variable initial_value="0.0631" name="p14" units="per_mV" cmeta:id="fitting_p14">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#fitting_p14">
+                    <bqbiol:is rdf:resource="herg:params#p14"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+        <variable initial_value="0.3" name="p15" units="uS" cmeta:id="membrane_rapid_delayed_rectifier_potassium_current_conductance">
+            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                <rdf:Description rdf:about="#membrane_rapid_delayed_rectifier_potassium_current_conductance">
+                   <bqbiol:is rdf:resource="https://chaste.comlab.ox.ac.uk/cellml/ns/oxford-metadata#membrane_rapid_delayed_rectifier_potassium_current_conductance"/>
+                </rdf:Description>
+            </rdf:RDF>
+        </variable>
+
+        <variable name="time" public_interface="in" units="ms"/>
+        <variable name="V" public_interface="in" units="mV"/>
+        <variable name="EK" public_interface="in" units="mV"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>IKr</ci>
+                <apply>
+                    <times/>
+                    <apply>
+                        <times/>
+                        <ci>p15</ci>
+                        <ci>o</ci>
+                    </apply>
+                    <apply>
+                        <minus/>
+                        <ci>V</ci>
+                        <ci>EK</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k34</ci>
+                <apply>
+                    <times/>
+                    <ci>p7</ci>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <times/>
+                            <ci>p8</ci>
+                            <ci>V</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k15</ci>
+                <apply>
+                    <times/>
+                    <ci>p13</ci>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <minus/>
+                                <ci>p14</ci>
+                            </apply>
+                            <ci>V</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k32</ci>
+                <apply>
+                    <times/>
+                    <ci>p3</ci>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <minus/>
+                                <ci>p4</ci>
+                            </apply>
+                            <ci>V</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k51</ci>
+                <apply>
+                    <times/>
+                    <ci>p11</ci>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <times/>
+                            <ci>p12</ci>
+                            <ci>V</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k12</ci>
+                <ci>p5</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>c2</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>k32</ci>
+                            <ci>o</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>k12</ci>
+                            <ci>c1</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <ci>k23</ci>
+                            <ci>k21</ci>
+                        </apply>
+                        <ci>c2</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>c1</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>k21</ci>
+                            <ci>c2</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>k51</ci>
+                            <ci>c0</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <ci>k12</ci>
+                            <ci>k15</ci>
+                        </apply>
+                        <ci>c1</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>c0</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>k15</ci>
+                        <ci>c1</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k51</ci>
+                        <ci>c0</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>i</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <times/>
+                        <ci>k34</ci>
+                        <ci>o</ci>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <ci>k43</ci>
+                        <ci>i</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k23</ci>
+                <apply>
+                    <times/>
+                    <ci>p1</ci>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <times/>
+                            <ci>p2</ci>
+                            <ci>V</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k21</ci>
+                <ci>p6</ci>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>o</ci>
+                </apply>
+                <apply>
+                    <minus/>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>k43</ci>
+                            <ci>i</ci>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <ci>k23</ci>
+                            <ci>c2</ci>
+                        </apply>
+                    </apply>
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <ci>k34</ci>
+                            <ci>k32</ci>
+                        </apply>
+                        <ci>o</ci>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>k43</ci>
+                <apply>
+                    <times/>
+                    <ci>p9</ci>
+                    <apply>
+                        <exp/>
+                        <apply>
+                            <times/>
+                            <apply>
+                                <minus/>
+                                <ci>p10</ci>
+                            </apply>
+                            <ci>V</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+
+    <connection>
+        <map_components component_1="environment" component_2="ikr"/>
+        <map_variables variable_1="time" variable_2="time"/>
+    </connection>
+    <connection>
+        <map_components component_1="ikr" component_2="membrane"/>
+        <map_variables variable_1="V" variable_2="V"/>
+    </connection>
+    <connection>
+        <map_components component_1="ikr" component_2="nernst"/>
+        <map_variables variable_1="EK" variable_2="EK"/>
+    </connection>
+</model>
